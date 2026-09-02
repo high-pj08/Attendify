@@ -12,7 +12,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!email.trim() || !password.trim()) {
+    if (!email || !password) {
       alert("Please enter email and password");
       return;
     }
@@ -20,14 +20,10 @@ function Login() {
     try {
       setLoading(true);
 
-      console.log("Sending login request...");
-
       const response = await API.post("/auth/login", {
-        email: email.trim(),
-        password: password,
+        email,
+        password,
       });
-
-      console.log("Login response:", response.data);
 
       const user = response.data.user;
 
@@ -36,24 +32,15 @@ function Login() {
         return;
       }
 
-      // Save complete user
-      localStorage.setItem(
-        "user",
-        JSON.stringify(user)
-      );
+      // Save logged-in user
+      localStorage.setItem("user", JSON.stringify(user));
 
       // Save user ID
-      localStorage.setItem(
-        "userId",
-        user.id || user._id
-      );
+      localStorage.setItem("userId", user.id);
 
-      alert(
-        response.data.message ||
-        "Login successful"
-      );
+      alert(response.data.message || "Login successful");
 
-      // Redirect according to role
+      // Redirect based on role
       if (user.role === "hr") {
         navigate("/admin", { replace: true });
       } else {
@@ -61,23 +48,12 @@ function Login() {
       }
 
     } catch (error) {
-      console.error("LOGIN ERROR:", error);
-
-      console.log(
-        "Backend response:",
-        error.response?.data
-      );
-
-      console.log(
-        "Status:",
-        error.response?.status
-      );
+      console.error("Login error:", error);
 
       alert(
         error.response?.data?.message ||
-        "Login failed. Please check your email and password."
+        "Login failed"
       );
-
     } finally {
       setLoading(false);
     }
@@ -92,9 +68,7 @@ function Login() {
           EA
         </div>
 
-        <h1>
-          Welcome to Attendify
-        </h1>
+        <h1>Welcome to Attendify</h1>
 
         <p className="login-subtitle">
           Employee Attendance Management System
@@ -102,39 +76,31 @@ function Login() {
 
         <form onSubmit={handleLogin}>
 
-          <label>
-            Email
-          </label>
+          <label>Email</label>
 
           <input
             type="email"
             placeholder="Enter your email"
             value={email}
-            onChange={(e) =>
-              setEmail(e.target.value)
-            }
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
 
-          <label>
-            Password
-          </label>
+          <label>Password</label>
 
           <input
             type="password"
             placeholder="Enter your password"
             value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
 
           <button
             type="submit"
             disabled={loading}
           >
-            {loading
-              ? "Logging in..."
-              : "Login"}
+            {loading ? "Logging in..." : "Login"}
           </button>
 
         </form>
