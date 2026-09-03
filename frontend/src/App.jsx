@@ -15,6 +15,7 @@ import Leave from "./pages/Leave";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
+import Register from "./pages/Register";
 
 
 // ======================================================
@@ -190,17 +191,14 @@ const getEmployeeProfile = async () => {
   // LOAD ALL DATA
   // ======================================================
 
-  useEffect(() => {
+            useEffect(() => {
+            if (!userId) return;
 
-  getTodayAttendance();
-
-  getAttendanceHistory();
-
-  getLeaveHistory();
-
-  getEmployeeProfile();
-
-}, []);
+            getTodayAttendance();
+            getAttendanceHistory();
+            getLeaveHistory();
+            getEmployeeProfile();
+          }, [userId]);
 
 
   // ======================================================
@@ -1690,7 +1688,20 @@ function App() {
         }
       />
 
-
+        <Route
+            path="/register"
+            element={
+              isLoggedIn ? (
+                isHR ? (
+                  <Navigate to="/admin" replace />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              ) : (
+                <Register />
+              )
+            }
+          />
       {/* ==================================================
           EMPLOYEE DASHBOARD
       ================================================== */}

@@ -76,6 +76,24 @@ function Login() {
 
         <form onSubmit={handleLogin}>
 
+          <p style={{ marginTop: "20px", textAlign: "center" }}>
+            Don't have an account?{" "}
+            <button
+              type="button"
+              onClick={() => navigate("/register")}
+              style={{
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                fontWeight: "600",
+              }}
+            >
+              Register
+            </button>
+          </p>
+          
+          
           <label>Email</label>
 
           <input
